@@ -1,0 +1,65 @@
+services:
+  server:
+    build:
+      context: ./docker
+    container_name: fl_server
+    volumes:
+      - .:/app
+    working_dir: /app/server
+    ports:
+      - "8080:8080"
+    command: ["python", "server.py"]
+    networks:
+      - fl_network
+
+  client1:
+    build:
+      context: ./docker
+    container_name: fl_client1
+    volumes:
+      - .:/app
+      - "C:/Users/Lenovo/Desktop/fed-med final/data/chest_xray:/data/chest_xray"
+    working_dir: /app/client
+    environment:
+      - CLIENT_ID=1
+    depends_on:
+      - server
+    command: ["sh", "-c", "sleep 10 && python client.py"]
+    networks:
+      - fl_network
+
+  client2:
+    build:
+      context: ./docker
+    container_name: fl_client2
+    volumes:
+      - .:/app
+      - "C:/Users/Lenovo/Desktop/fed-med final/data/chest_xray:/data/chest_xray"
+    working_dir: /app/client
+    environment:
+      - CLIENT_ID=2
+    depends_on:
+      - server
+    command: ["sh", "-c", "sleep 10 && python client.py"]
+    networks:
+      - fl_network
+
+  client3:
+    build:
+      context: ./docker
+    container_name: fl_client3
+    volumes:
+      - .:/app
+      - "C:/Users/Lenovo/Desktop/fed-med final/data/chest_xray:/data/chest_xray"
+    working_dir: /app/client
+    environment:
+      - CLIENT_ID=3
+    depends_on:
+      - server
+    command: ["sh", "-c", "sleep 10 && python client.py"]
+    networks:
+      - fl_network
+
+networks:
+  fl_network:
+    driver: bridge
